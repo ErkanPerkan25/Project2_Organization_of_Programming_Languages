@@ -1,0 +1,20 @@
+#should give:
+# function: myfun with 2 local variables, 1 ifs and no whiles
+# function: myfun2 with 5 local variables and no ifs or whiles
+# 6 global variables
+int x,y,z;
+float r,svar,ttttVariable;
+
+void myfun()
+begin
+  int newV, newV2;
+  newV<-2;
+  read(newV2);
+  if (newV==newV2) then
+    print(newV); 
+end
+
+void myfun2()
+begin
+  float  kkk, jjj, mmm, nnn, iiii;
+end

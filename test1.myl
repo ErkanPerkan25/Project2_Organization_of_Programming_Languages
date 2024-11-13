@@ -1,0 +1,3 @@
+#should give 6 global variables;
+int x,y,z;
+float r,svar,ttttVariable;
