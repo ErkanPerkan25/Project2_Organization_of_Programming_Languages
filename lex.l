@@ -24,7 +24,7 @@ ALPHA       [A-Za-z]
 WSPACE      [\ \t\n]
 
 %%
-<<EOF>>                 {return 23;}
+<<EOF>>                 {return Parser::token::YYEOF;}
 "void"                  {return Parser::token::VOID_T;}    /*Keyword for void, rc 24*/
 "int"                   {return Parser::token::INT_T;}    /*Keyword for int, rc 25*/
 "float"                 {return Parser::token::FLOAT_T;}    /*Keyword for float, rc 26*/
@@ -70,5 +70,4 @@ WSPACE      [\ \t\n]
 
 .                       { std::cerr << "UNMATECHED CHARACTER: '" << yytext[0]
                             << "' on line " << yylineno << std::endl;}
-
 %%

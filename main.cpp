@@ -15,11 +15,18 @@ int yyFlexLexer::yylex() {
 
 int main(int argc, char ** argv)
 {
-    ifstream ifile(argv[1]);
+    if (!argv[1]) {
+        MyScanner scanner(cin,cerr);
+        Parser parser(&scanner);
+        parser.parse();
+    }
+    else{
+        ifstream ifile(argv[1]);
 
-    MyScanner scanner(ifile, cerr);
-    Parser parser{&scanner};
-    parser.parse();
+        MyScanner scanner(ifile, cerr);
+        Parser parser(&scanner);
+        parser.parse();
+    }
 
     return 0;
 }

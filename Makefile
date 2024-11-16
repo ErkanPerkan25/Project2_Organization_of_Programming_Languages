@@ -1,8 +1,8 @@
 CC = g++ -c -Wall -ansi -pedantic -std=c++20 
 LN = g++
 
-mycalc: main.o Parser.o MyScanner.o
-	$(LN) -o mycalc main.o Parser.o MyScanner.o 
+mycalc: main.o Parser.o MyScanner.o MyMemory.o
+	$(LN) -o mycalc main.o Parser.o MyScanner.o MyMemory.o
 
 main.o: main.cpp Parser.hpp MyScanner.hpp
 	$(CC) main.cpp
@@ -21,6 +21,9 @@ Parser.hpp: calc.y MyScanner.hpp
 
 Parser.cpp: calc.y MyScanner.hpp
 	bison calc.y
+
+MyMemory.o: MyMemory.cpp MyMemory.hpp
+	$(CC) MyMemory.cpp
 
 clean:
 	/bin/rm -f *~ *.o mycalc Parser.cpp Parser.hpp MyScanner.cpp

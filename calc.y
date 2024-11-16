@@ -2,6 +2,10 @@
 #include <iostream>
 #include <FlexLexer.h>
 
+// don't necessarily need this all the time - this code uses some
+// custom functions ...
+#include "MyMemory.hpp"
+
 // defines my lexical analyzer class
 #include "MyScanner.hpp"
 
@@ -10,6 +14,12 @@
 
 using namespace yy;
 using namespace std;
+
+int globalCount = 0;
+int localCount = 0;
+int ifCount = 0;
+int whileCount = 0;
+string funcName = "";
 
 %}
 
@@ -68,6 +78,8 @@ struct myst
 %token THEN_T
 %token ELSE_T
 
+%token EOF_T
+
 
 // if grammar allows multiple interpretations of an expr,
 //   these can help ...
@@ -80,13 +92,31 @@ struct myst
 
 /* Grammar follows */
 %%
-start: pgm;
+start: pgm
+     {
+     }
+     ;
 
-pgm: pgmpart pgm | pgmpart;
+pgm: pgmpart pgm 
+   {
+   }
+   | 
+   pgmpart;
 
-pgmpart: vardecl | function;
+pgmpart: vardecl
+       { 
+        // global variables, count them 
+       }
+       | 
+       function
+       {
+        
+       }
+       ;
 
 vardecl: type varlist SEMICOLON_T
+       {
+       };
 
 type: INT_T
     |
@@ -95,22 +125,45 @@ type: INT_T
     VOID_T
     ;
 
-varlist: ID_T COMMA_T varlist |
-       ID_T;
+varlist: ID_T COMMA_T varlist
+       {        
+        //  varibale count 
+        // global or local?
+        
+       }
+       |
+       ID_T
+       {
+       }
+       ;
+
 
 function: type ID_T LPAREN_T RPAREN_T body
+        {
+            $$.sval = $2.sval;
+        }
         |
         type ID_T LPAREN_T fplist RPAREN_T body
+        {
+            $$.sval = $2.sval;
+        }
         ;
 
 body: BEGIN_T bodylist END_T;
 
 fplist: ID_T COMMA_T fplist
+      {
+      }
       |
       ID_T
+      {
+      }
       ;
 
 bodylist: vardecl bodylist
+        {
+            // local variabele count?
+        }
         | 
         stmt bodylist
         | /*epsilon*/;
@@ -126,27 +179,74 @@ stmt: assign SEMICOLON_T
     body
     ;
 
-assign: ID_T ASSIGNOP_T expr;
+assign: ID_T ASSIGNOP_T expr
+      {
+        storeValue($1.sval, $3.dval);
+      }
+      ;
 
 expr: factor
+    {
+        $$.dval = $1.dval;    
+    }
     |
     expr ADDOP_T factor
+    {
+        if($2.sval == "+")
+            $$.dval = $1.dval + $3.dval;
+        else
+            $$.dval = $1.dval - $3.dval;
+    }
     ;
 
 factor: term
+      {
+        $$.dval = $1.dval;
+      }
       |
       factor MULOP_T term
+      {
+        if($2.sval == "*")
+            $$.dval = $1.dval * $3.dval;
+        else
+            $$.dval = $1.dval / $3.dval;
+      }
       ;
 
-term: ID_T NUM_INT_T
+term: ID_T 
+    {
+        $$.dval = lookupValue($1.sval);
+    } 
+    | 
+    NUM_INT_T
+    {
+        $$.dval = $1.ival;
+    }
     |
     NUM_REAL_T
+    {
+        $$.dval = $1.dval;
+    }
     |
     LPAREN_T expr RPAREN_T 
+    {
+        $$.dval = $2.dval;
+    }
     |
-    ADDOP_T term
+    ADDOP_T term 
+    {
+        if($1.sval == "-"){
+            $$.dval = - $2.dval;
+        }
+        else{
+            $$.dval = $2.dval;
+        }
+    }
     |
     fcall
+    {
+        $$.dval = $1.dval; 
+    }
     ;
 
 bexpr: bfactor
