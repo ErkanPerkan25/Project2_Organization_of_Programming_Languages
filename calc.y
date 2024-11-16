@@ -15,8 +15,9 @@
 using namespace yy;
 using namespace std;
 
-int globalCount = 0;
-int localCount = 0;
+int globalVars = 0;
+int localVars = 0;
+int varCount = 0;
 int ifCount = 0;
 int whileCount = 0;
 string funcName = "";
@@ -45,9 +46,6 @@ struct myst
 %define api.value.type {struct myst}
 
 %parse-param {MyScanner* scanner}
-
-
-
 
 
 /* bison token  Declarations */
@@ -93,29 +91,41 @@ struct myst
 /* Grammar follows */
 %%
 start: pgm
-     {
-     }
+    { 
+        cout << "The program contains " << globalVars << " global variable declarations" << endl;
+    }
      ;
 
-pgm: pgmpart pgm 
-   {
-   }
+pgm: pgmpart
+   pgm 
    | 
    pgmpart;
 
 pgmpart: vardecl
        { 
         // global variables, count them 
+        globalVars += varCount;
+        varCount = 0;
        }
        | 
        function
        {
-        
+        localVars = varCount;
+        cout << "Function: " << $$.sval << " contatins:" << endl;
+        cout << "*  local variables: " << localVars << endl;
+        cout << "*    if statements: " << ifCount << endl;
+        cout << "* while statements: " << whileCount << endl;
+
+        varCount = 0;
+        localVars = 0; 
+        ifCount = 0;
+        whileCount = 0;
        }
        ;
 
 vardecl: type varlist SEMICOLON_T
        {
+        $$.dval = $2.dval;
        };
 
 type: INT_T
@@ -129,11 +139,14 @@ varlist: ID_T COMMA_T varlist
        {        
         //  varibale count 
         // global or local?
-        
+        varCount++;
+        $$.dval = varCount;
        }
        |
        ID_T
        {
+        varCount++;
+        $$.dval = varCount;
        }
        ;
 
@@ -153,10 +166,12 @@ body: BEGIN_T bodylist END_T;
 
 fplist: ID_T COMMA_T fplist
       {
+        varCount++;
       }
       |
       ID_T
       {
+        varCount++;
       }
       ;
 
@@ -173,8 +188,14 @@ stmt: assign SEMICOLON_T
     fcall SEMICOLON_T
     |
     while
+    {
+        whileCount++;
+    }
     |
     if
+    {
+        ifCount++; 
+    }
     |
     body
     ;
@@ -279,7 +300,10 @@ aplist: expr COMMA_T aplist
       expr
       ;
 
-while: WHILE_T LPAREN_T bexpr RPAREN_T stmt;
+while: WHILE_T LPAREN_T bexpr RPAREN_T stmt
+     {
+     }
+     ;
 
 if: IF_T LPAREN_T bexpr RPAREN_T THEN_T stmt
   |

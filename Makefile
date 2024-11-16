@@ -1,29 +1,34 @@
-CC = g++ -c -Wall -ansi -pedantic -std=c++20 
-LN = g++
+CXX ?= g++
+LEX ?= flex++
+BISON ?= bison
 
-mycalc: main.o Parser.o MyScanner.o MyMemory.o
-	$(LN) -o mycalc main.o Parser.o MyScanner.o MyMemory.o
+CXXFLAGS := -c -Wall -ansi -pedantic -std=c++20
+
+p2sol: main.o Parser.o MyScanner.o MyMemory.o
+	$(CXX) -o p2sol main.o Parser.o MyScanner.o MyMemory.o
 
 main.o: main.cpp Parser.hpp MyScanner.hpp
-	$(CC) main.cpp
+	$(CC) $(CXXFLAGS) main.cpp
 
 Parser.o: Parser.cpp Parser.hpp MyScanner.hpp
-	$(CC) Parser.cpp
+	$(CC) $(CXXFLAGS) Parser.cpp
 
 MyScanner.o: MyScanner.cpp Parser.hpp MyScanner.hpp
-	$(CC) MyScanner.cpp
+	$(CC) $(CXXFLAGS) MyScanner.cpp
 
 MyScanner.cpp: lex.l MyScanner.hpp
-	flex++ lex.l
+	$(LEX) lex.l
 
 Parser.hpp: calc.y MyScanner.hpp
-	bison calc.y
+	$(BISON) calc.y
 
 Parser.cpp: calc.y MyScanner.hpp
-	bison calc.y
+	$(BISON) calc.y
 
 MyMemory.o: MyMemory.cpp MyMemory.hpp
-	$(CC) MyMemory.cpp
+	$(CC) $(CXXFLAGS) MyMemory.cpp
 
 clean:
-	/bin/rm -f *~ *.o mycalc Parser.cpp Parser.hpp MyScanner.cpp
+	/bin/rm -f *~ *.o p2sol Parser.cpp Parser.hpp MyScanner.cpp
+
+.PHONY: clean
