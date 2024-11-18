@@ -19,7 +19,7 @@ To run the program you run the following command with a input file:<br>
 ./p2sol <input_file>
 ```
 <br>
-Or run the program and enter in the code with the command line:
+Or run the program and enter in the code with the command line:<br>
 ```
 ./p2sol
 ```
