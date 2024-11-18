@@ -1,5 +1,5 @@
-# Project1 - Organization Of Programming Languages
-To build a lexical analyzer for a programming language using Flex++. 
+# Project2 - Organization Of Programming Languages
+To build a parser and code summarizer for a programming language using the tools **bison** and **flex++**
 ## **Eric Hansson**
 
 - Platform:<br>
