@@ -1,3 +1,9 @@
+/********************************************
+* Author: Eric Hansson 
+* Date: 11/16/2024
+* Purpose:
+
+*********************************************/
 %{
 #include <iostream>
 #include <FlexLexer.h>
@@ -91,6 +97,7 @@ struct myst
 /* Grammar follows */
 %%
 start: pgm
+     // Prints out the global variables
     { 
         cout << "The program contains " << globalVars << " global variable declarations" << endl;
     }
@@ -103,19 +110,20 @@ pgm: pgmpart
 
 pgmpart: vardecl
        { 
-        // global variables, count them 
+        // counting the global variables 
         globalVars += varCount;
         varCount = 0;
        }
        | 
        function
        {
+        // Sets the local variables, and then prints all the information of the function
         localVars = varCount;
         cout << "Function: " << $$.sval << " contatins:" << endl;
         cout << "*  local variables: " << localVars << endl;
         cout << "*    if statements: " << ifCount << endl;
         cout << "* while statements: " << whileCount << endl;
-
+        // Resets the values for the next function
         varCount = 0;
         localVars = 0; 
         ifCount = 0;
@@ -138,13 +146,13 @@ type: INT_T
 varlist: ID_T COMMA_T varlist
        {        
         //  varibale count 
-        // global or local?
         varCount++;
         $$.dval = varCount;
        }
        |
        ID_T
        {
+        // counts the last variable in the declaration
         varCount++;
         $$.dval = varCount;
        }
@@ -177,7 +185,6 @@ fplist: ID_T COMMA_T fplist
 
 bodylist: vardecl bodylist
         {
-            // local variabele count?
         }
         | 
         stmt bodylist
@@ -189,11 +196,13 @@ stmt: assign SEMICOLON_T
     |
     while
     {
+        // Add one to the while statements count
         whileCount++;
     }
     |
     if
     {
+        // Add one to the if statements count
         ifCount++; 
     }
     |

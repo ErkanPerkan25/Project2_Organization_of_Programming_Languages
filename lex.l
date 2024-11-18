@@ -1,7 +1,7 @@
 /******************************************************************
 * Author: Eric Hansson
 * File: lex.l
-* Date: 11/11/2024
+* Date: 11/16/2024
 * Purpose: This code is used to look for valid tokens which is then
 associted with the tokens correct type.
 *******************************************************************/
@@ -24,7 +24,7 @@ ALPHA       [A-Za-z]
 WSPACE      [\ \t\n]
 
 %%
-<<EOF>>                 {return Parser::token::YYEOF;}
+<<EOF>>                 {return Parser::token::YYEOF;} 
 "void"                  {return Parser::token::VOID_T;}    /*Keyword for void, rc 24*/
 "int"                   {return Parser::token::INT_T;}    /*Keyword for int, rc 25*/
 "float"                 {return Parser::token::FLOAT_T;}    /*Keyword for float, rc 26*/

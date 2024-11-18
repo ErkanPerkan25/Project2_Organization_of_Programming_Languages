@@ -7,16 +7,21 @@ Arch Linux
 
 - Details to compile program:<br>
 To compile the program you run the command `make` as it has a Makefile,
-it should create a executable called **lex-analyzer**<br>
+it should create a executable called **p2sol**<br>
 
 ```
 make
 ```
 
 - Details to run program: 
-To run the program you run the following command:<br>
+To run the program you run the following command with a input file:<br>
 ```
-./lex-analyzer <input_file>
+./p2sol <input_file>
+```
+<br>
+Or run the program and enter in the code with the command line:
+```
+./p2sol
 ```
 
 - Any known bugs?
@@ -24,7 +29,4 @@ I have not come around any bugs with my program. I have tried a few different ty
 see if there are any bugs to are hidden. But I have not found any.
 
 - Overview of solving project:
-To solve this project I took time and solved each step for the different Token Types. And tested each of
-them to see if they were correcting correctly. At the end I tried everything togeheter with a biggger test
-case to make sure there was no conflicting parts.
 
