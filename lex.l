@@ -35,18 +35,18 @@ WSPACE      [\ \t\n]
 "else"                  {return Parser::token::ELSE_T;}    /*Keyword for else, rc 31*/
 "while"                 {return Parser::token::WHILE_T;}    /*Keyword for whilie, rc 32*/
 
-/* Expression for ID_T */
+    /* Expression for ID_T */
 {ALPHA}({ALPHA}|{DIGIT})* {
                     yylval->sval=YYText();
                     return Parser::token::ID_T;}
 
-/* Expression for integers*/
+    /* Expression for integers*/
 {DIGIT}+                {
                         int x = stoi(YYText());
                         yylval->ival=x;
                         return Parser::token::NUM_INT_T;}
 
-/* Expression for floating point number*/
+    /* Expression for floating point number*/
 {DIGIT}+\.{DIGIT}+      {
                         double x = stod(YYText());
                         yylval->dval=x;
