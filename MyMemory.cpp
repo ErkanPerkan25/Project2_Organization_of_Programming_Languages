@@ -1,3 +1,6 @@
+/*************************************
+* Code provided by Dr.Blythe
+*************************************/
 #include "MyMemory.hpp"
 
 #include <map>

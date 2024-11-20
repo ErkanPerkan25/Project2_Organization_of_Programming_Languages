@@ -1,3 +1,6 @@
+/***********************************************
+ * Code provided by Dr.Blythe
+ ***********************************************/
 #ifndef _MY_SCANNER_HPP_
 #define _MY_SCANNER_HPP_
 

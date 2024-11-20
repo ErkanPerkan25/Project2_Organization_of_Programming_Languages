@@ -1,7 +1,11 @@
 /********************************************
 * Author: Eric Hansson 
-* Date: 11/16/2024
-* Purpose:
+* Date: 11/19/2024
+* Purpose: To use to create grammar and give it
+meaning. It will count globar variables, local
+variables, if statements, while statements.
+It will print also out the functions and their 
+local variables, if statements and while statements
 
 *********************************************/
 %{
@@ -97,8 +101,8 @@ struct myst
 /* Grammar follows */
 %%
 start: pgm
-     // Prints out the global variables
     { 
+        // Prints out the global variables
         cout << "The program contains " << globalVars << " global variable declarations" << endl;
     }
      ;
@@ -110,7 +114,7 @@ pgm: pgmpart
 
 pgmpart: vardecl
        { 
-        // counting the global variables 
+        // counting the global variables, and resets the variable count
         globalVars += varCount;
         varCount = 0;
        }
@@ -161,11 +165,13 @@ varlist: ID_T COMMA_T varlist
 
 function: type ID_T LPAREN_T RPAREN_T body
         {
+            // gets the function name
             $$.sval = $2.sval;
         }
         |
         type ID_T LPAREN_T fplist RPAREN_T body
         {
+            // gets the function name
             $$.sval = $2.sval;
         }
         ;
@@ -174,11 +180,13 @@ body: BEGIN_T bodylist END_T;
 
 fplist: ID_T COMMA_T fplist
       {
+        // Counts the parameters in a function as local variables
         varCount++;
       }
       |
       ID_T
       {
+        // Counts the parameters in a function as local variables
         varCount++;
       }
       ;
@@ -211,6 +219,7 @@ stmt: assign SEMICOLON_T
 
 assign: ID_T ASSIGNOP_T expr
       {
+        // stores a values to a variable
         storeValue($1.sval, $3.dval);
       }
       ;
@@ -222,6 +231,7 @@ expr: factor
     |
     expr ADDOP_T factor
     {
+        // does addition or subtraction
         if($2.sval == "+")
             $$.dval = $1.dval + $3.dval;
         else
@@ -236,6 +246,7 @@ factor: term
       |
       factor MULOP_T term
       {
+        // does multiplication or division
         if($2.sval == "*")
             $$.dval = $1.dval * $3.dval;
         else
@@ -245,6 +256,7 @@ factor: term
 
 term: ID_T 
     {
+        // checks what is stored in a variable
         $$.dval = lookupValue($1.sval);
     } 
     | 
@@ -265,6 +277,7 @@ term: ID_T
     |
     ADDOP_T term 
     {
+        // checks if a number is negative or positive
         if($1.sval == "-"){
             $$.dval = - $2.dval;
         }
@@ -321,7 +334,7 @@ if: IF_T LPAREN_T bexpr RPAREN_T THEN_T stmt
 
 %%
 
-
+// Gives a error message when it does not recognize a input
 void Parser::error(const std::string& msg) {
     std::cerr << msg << " near " << scanner->YYText()  
               << " on line #" << scanner->lineno()

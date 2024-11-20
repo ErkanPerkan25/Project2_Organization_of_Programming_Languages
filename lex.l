@@ -1,7 +1,7 @@
 /******************************************************************
 * Author: Eric Hansson
 * File: lex.l
-* Date: 11/16/2024
+* Date: 11/19/2024
 * Purpose: This code is used to look for valid tokens which is then
 associted with the tokens correct type.
 *******************************************************************/
@@ -35,16 +35,18 @@ WSPACE      [\ \t\n]
 "else"                  {return Parser::token::ELSE_T;}    /*Keyword for else, rc 31*/
 "while"                 {return Parser::token::WHILE_T;}    /*Keyword for whilie, rc 32*/
 
-
+/* Expression for ID_T */
 {ALPHA}({ALPHA}|{DIGIT})* {
                     yylval->sval=YYText();
                     return Parser::token::ID_T;}
 
+/* Expression for integers*/
 {DIGIT}+                {
                         int x = stoi(YYText());
                         yylval->ival=x;
                         return Parser::token::NUM_INT_T;}
 
+/* Expression for floating point number*/
 {DIGIT}+\.{DIGIT}+      {
                         double x = stod(YYText());
                         yylval->dval=x;
@@ -64,7 +66,7 @@ WSPACE      [\ \t\n]
 ")"                     {return Parser::token::RPAREN_T;}    /*Expression for Tokens of type RPAREN_T*/
 "~"                     {return Parser::token::NOT_T;}    /*Expression for Tokens of type NOT_T*/
 
-{WSPACE}+               {}
+{WSPACE}+               {} /* Expresison for white space*/
 
 #.*\n                     {}    /*Expression for comments*/
 

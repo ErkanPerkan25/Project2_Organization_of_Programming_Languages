@@ -29,4 +29,6 @@ I have not come around any bugs with my program. I have tried a few different ty
 see if there are any bugs to are hidden. But I have not found any.
 
 - Overview of solving project:
-
+To solve this project I looked at the where the grammar declared variables and focus on make in the
+count of variables work first. And then I focused on making the counting and printing of the functions
+to work.
