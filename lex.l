@@ -53,7 +53,7 @@ WSPACE      [\ \t\n]
                         return Parser::token::NUM_REAL_T;}
 
 "+"|"-"                 {yylval->sval = YYText(); return Parser::token::ADDOP_T;}     /*Expression for Tokens of type ADDOP_T*/
-"*"|'/'                 {yylval->sval = YYText(); return Parser::token::MULOP_T;}     /*Expression for Tokens of type MULTOP_T*/
+"*"|"/"                 {yylval->sval = YYText(); return Parser::token::MULOP_T;}     /*Expression for Tokens of type MULTOP_T*/
 ">"|"<"|"=="|"<="|">="  {return Parser::token::RELOP_T;}
 "<-"                    {return Parser::token::ASSIGNOP_T;}    /*Expression for Tokens of type ASSIGNOP_T*/
 "&&"                    {return Parser::token::AND_T;}    /*Expression for Tokens of type AND_T*/
@@ -68,7 +68,7 @@ WSPACE      [\ \t\n]
 
 {WSPACE}+               {} /* Expresison for white space*/
 
-#.*\n                     {}    /*Expression for comments*/
+#.*\n                   {}    /*Expression for comments*/
 
 .                       { std::cerr << "UNMATECHED CHARACTER: '" << yytext[0]
                             << "' on line " << yylineno << std::endl;}
