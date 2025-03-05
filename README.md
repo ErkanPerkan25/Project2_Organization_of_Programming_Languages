@@ -1,6 +1,6 @@
 # Parser
-**Project2 - Organization Of Programming Languages**
-To build a parser and code summarizer for a programming language using the tools **bison** and **flex++**
+**Project2 - Organization Of Programming Languages** <br>
+To build a parser and code summarizer for a programming language using the tools **bison** and **flex++**<br>
 Author: **Eric Hansson**
 
 - Platform:<br>
